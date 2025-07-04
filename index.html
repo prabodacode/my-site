@@ -2,22 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact Me | EmailJS</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>EmailJS Example (Fixed)</title>
 </head>
 <body>
-  <div class="container">
-    <h1>Contact Me</h1>
-    <p>Send your message using the form below.</p>
-    <form id="contact-form">
-      <input type="text" name="title" placeholder="Enter Subject" required />
-      <textarea name="message" placeholder="Your message here..." required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-    <p id="response"></p>
-  </div>
+  <form id="contact-form">
+    <input type="text" name="title" placeholder="Title" required /><br>
+    <textarea name="message" placeholder="Message" required></textarea><br>
+    <button type="submit">Send</button>
+  </form>
+  <p id="response"></p>
 
-  <script type="module" src="script.js"></script>
+  <script type="module">
+    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+
+    emailjs.init('GB3auA7v_QRGWZ79s'); // 🔁 Replace with your key
+
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      emailjs.sendForm('service_u1m7pyp', 'template_77xbudf', this)
+        .then(() => {
+          document.getElementById('response').textContent = 'Email sent successfully!';
+        }, (error) => {
+          console.error('FAILED...', error);
+          document.getElementById('response').textContent = 'Error: ' + error.text;
+        });
+    });
+  </script>
 </body>
 </html>
