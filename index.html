@@ -3,16 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Simple Site</title>
+  <title>Email Sender</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init('YOUR_PUBLIC_KEY'); // replace with your Public Key
+    })();
+  </script>
 </head>
 <body>
   <header>
-    <h1>Welcome to My Simple Site</h1>
+    <h1>Send a Message</h1>
   </header>
   <div class="content">
-    <p id="text">Click the button to change my color!</p>
-    <button id="colorBtn">Change Color</button>
+    <form id="contact-form">
+      <label for="emailTitle">Title:</label><br />
+      <input type="text" name="title" id="emailTitle" placeholder="Enter email title" /><br /><br />
+
+      <label for="emailBody">Message:</label><br />
+      <textarea name="message" id="emailBody" placeholder="Enter your message here..."></textarea><br /><br />
+
+      <button type="submit">Send Email</button>
+    </form>
+    <p id="statusMsg"></p>
   </div>
 
   <script src="script.js"></script>
