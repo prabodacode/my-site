@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Email Sender</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>EmailJS Example</title>
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
     (function() {
-      emailjs.init('GB3auA7v_QRGWZ79s'); // replace with your Public Key
+      emailjs.init("GB3auA7v_QRGWZ79s"); // ✅ Replace with your actual public key
     })();
   </script>
 </head>
 <body>
-  <header>
-    <h1>Send a Message</h1>
-  </header>
-  <div class="content">
-    <form id="contact-form">
-      <label for="emailTitle">Title:</label><br />
-      <input type="text" name="title" id="emailTitle" placeholder="Enter email title" /><br /><br />
+  <form id="contact-form">
+    <input type="text" name="title" placeholder="Title" required /><br>
+    <textarea name="message" placeholder="Message" required></textarea><br>
+    <button type="submit">Send</button>
+  </form>
+  <p id="response"></p>
 
-      <label for="emailBody">Message:</label><br />
-      <textarea name="message" id="emailBody" placeholder="Enter your message here..."></textarea><br /><br />
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-      <button type="submit">Send Email</button>
-    </form>
-    <p id="statusMsg"></p>
-  </div>
-
-  <script src="script.js"></script>
+      emailjs.sendForm('service_u1m7pyp', 'template_77xbudf', this)
+        .then(function(response) {
+          document.getElementById('response').textContent = 'Success: Email sent!';
+        }, function(error) {
+          console.error('FAILED...', error);
+          document.getElementById('response').textContent = 'Error: ' + error.text;
+        });
+    });
+  </script>
 </body>
 </html>
