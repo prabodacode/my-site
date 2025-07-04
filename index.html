@@ -1,13 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>EmailJS Example</title>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    (function() {
-      emailjs.init("GB3auA7v_QRGWZ79s"); // ✅ Replace with your actual public key
-    })();
-  </script>
+  <meta charset="UTF-8" />
+  <title>EmailJS Example (Fixed)</title>
 </head>
 <body>
   <form id="contact-form">
@@ -17,14 +12,18 @@
   </form>
   <p id="response"></p>
 
-  <script>
+  <script type="module">
+    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+
+    emailjs.init('GB3auA7v_QRGWZ79s'); // 🔁 Replace with your key
+
     document.getElementById('contact-form').addEventListener('submit', function(e) {
       e.preventDefault();
 
       emailjs.sendForm('service_u1m7pyp', 'template_77xbudf', this)
-        .then(function(response) {
-          document.getElementById('response').textContent = 'Success: Email sent!';
-        }, function(error) {
+        .then(() => {
+          document.getElementById('response').textContent = 'Email sent successfully!';
+        }, (error) => {
           console.error('FAILED...', error);
           document.getElementById('response').textContent = 'Error: ' + error.text;
         });
