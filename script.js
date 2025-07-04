@@ -1,20 +1,22 @@
 import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
 
-emailjs.init('GB3auA7v_QRGWZ79s'); // 🔁 Replace with your actual public key
+// Replace with your actual EmailJS public key
+emailjs.init('GB3auA7v_QRGWZ79s');
 
-document.getElementById('contact-form').addEventListener('submit', function(e) {
+document.getElementById('contact-form').addEventListener('submit', function (e) {
   e.preventDefault();
 
-  emailjs.sendForm('service_u1m7pyp', 'template_77xbudf', this)
+  const response = document.getElementById('response');
+  response.textContent = 'Sending...';
+
+  emailjs
+    .sendForm('service_u1m7pyp', 'template_77xbudf', this)
     .then(() => {
-      const response = document.getElementById('response');
-      response.textContent = '✅ Message sent successfully!';
-      response.style.color = 'green';
+      response.textContent = '✅ Email sent successfully!';
       this.reset();
-    }, (error) => {
+    })
+    .catch((error) => {
       console.error('FAILED...', error);
-      const response = document.getElementById('response');
-      response.textContent = '❌ Failed to send message.';
-      response.style.color = 'red';
+      response.textContent = '❌ Error: ' + (error?.text || error);
     });
 });
