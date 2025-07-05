@@ -2,31 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>EmailJS Example (Fixed)</title>
+  <title>Send Email via Render Backend</title>
 </head>
 <body>
-  <form id="contact-form">
-    <input type="text" name="title" placeholder="Title" required /><br>
-    <textarea name="message" placeholder="Message" required></textarea><br>
-    <button type="submit">Send</button>
+  <h2>Send Email</h2>
+  <form id="emailForm">
+    <input type="text" id="title" placeholder="Email Subject" required /><br /><br />
+    <textarea id="message" placeholder="Email Message" required></textarea><br /><br />
+    <button type="submit">Send Email</button>
   </form>
-  <p id="response"></p>
 
-  <script type="module">
-    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+  <p id="status"></p>
 
-    emailjs.init('GB3auA7v_QRGWZ79s'); // 🔁 Replace with your key
+  <script>
+    const form = document.getElementById('emailForm');
+    const status = document.getElementById('status');
 
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      emailjs.sendForm('service_u1m7pyp', 'template_77xbudf', this)
-        .then(() => {
-          document.getElementById('response').textContent = 'Email sent successfully!';
-        }, (error) => {
-          console.error('FAILED...', error);
-          document.getElementById('response').textContent = 'Error: ' + error.text;
+      const title = document.getElementById('title').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!title || !message) {
+        status.textContent = 'Please fill both fields.';
+        return;
+      }
+
+      status.textContent = 'Sending email...';
+
+      try {
+        const response = await fetch('https://email-sender-km2m.onrender.com/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, message })
         });
+
+        const data = await response.json();
+        if (data.success) {
+          status.textContent = 'Email sent successfully!';
+          form.reset();
+        } else {
+          status.textContent = 'Failed to send email: ' + (data.message || 'Unknown error');
+        }
+      } catch (err) {
+        status.textContent = 'Error sending email: ' + err.message;
+      }
     });
   </script>
 </body>
